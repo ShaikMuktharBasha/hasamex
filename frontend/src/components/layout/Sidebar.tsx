@@ -75,8 +75,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Brand Header */}
       <div className="p-5 border-b border-[#343331]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#cc785c] flex items-center justify-center text-white shadow-sm shadow-[#cc785c]/30">
-            <Feather className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#da7a5b] to-[#b85f44] flex items-center justify-center text-white shadow-sm shadow-[#cc785c]/30 p-1.5 border border-white/10">
+            <svg viewBox="0 0 64 64" fill="none" className="w-full h-full">
+              <circle cx="32" cy="32" r="18" stroke="#faf9f5" strokeWidth="3" strokeOpacity="0.9" fill="none"/>
+              <path d="M32 18V46" stroke="#faf9f5" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M18 32H46" stroke="#faf9f5" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M22.1 22.1L41.9 41.9" stroke="#faf9f5" strokeWidth="2.5" strokeLinecap="round" strokeOpacity="0.75"/>
+              <path d="M41.9 22.1L22.1 41.9" stroke="#faf9f5" strokeWidth="2.5" strokeLinecap="round" strokeOpacity="0.75"/>
+              <circle cx="32" cy="32" r="4.5" fill="#faf9f5"/>
+              <circle cx="32" cy="32" r="2" fill="#b85f44"/>
+            </svg>
           </div>
           <div>
             <h1 className="font-serif text-lg font-bold text-[#faf9f5] tracking-tight leading-none">
