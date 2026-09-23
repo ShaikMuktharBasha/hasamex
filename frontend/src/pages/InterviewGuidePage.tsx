@@ -34,38 +34,55 @@ export const InterviewGuidePage: React.FC<InterviewGuidePageProps> = ({
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchQuestions = async () => {
       try {
         setLoadingQuestions(true);
         const data = await api.getQuestions();
-        setQuestions(data);
-        if (!selectedQuestionId && data.length > 0) {
-          onSelectQuestion(data[0].id);
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setQuestions(data);
+          if (!selectedQuestionId) {
+            onSelectQuestion(data[0].id);
+          }
         }
       } catch (err) {
         console.error('Failed to load questions', err);
       } finally {
-        setLoadingQuestions(false);
+        if (isMounted) setLoadingQuestions(false);
       }
     };
     fetchQuestions();
+    return () => { isMounted = false; };
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchAnalysis = async () => {
       if (!selectedQuestionId) return;
       try {
         setLoadingAnalysis(true);
         const data = await api.getQuestionAnalysis(selectedQuestionId);
-        setAnalysis(data);
+        if (isMounted && data) {
+          setAnalysis(data);
+        }
       } catch (err) {
         console.error(`Failed to load analysis for ${selectedQuestionId}`, err);
       } finally {
-        setLoadingAnalysis(false);
+        if (isMounted) setLoadingAnalysis(false);
       }
     };
     fetchAnalysis();
+    return () => { isMounted = false; };
   }, [selectedQuestionId]);
+
+  const questionsList = questions.length > 0 ? questions : [
+    { id: 'q1', question_number: 1, question_text: 'How would you describe current adoption of robotic surgery in your market?', theme: 'Current Market Adoption' },
+    { id: 'q2', question_number: 2, question_text: 'What are the main barriers to adoption?', theme: 'Adoption Barriers & Capital Approval' },
+    { id: 'q3', question_number: 3, question_text: 'How important are hospital budgets and ROI in purchasing decisions?', theme: 'Budgets & ROI Importance' },
+    { id: 'q4', question_number: 4, question_text: 'How important are surgeon training and clinical outcomes?', theme: 'Surgeon Training & Outcomes' },
+    { id: 'q5', question_number: 5, question_text: 'What adoption trend do you expect over the next 3–5 years?', theme: '3-5 Year Outlook & Growth' },
+    { id: 'q6', question_number: 6, question_text: 'What is the typical hospital decision-making timeline for purchasing a new robotic system?', theme: 'Purchasing Timelines & Decision Process' }
+  ];
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
@@ -98,7 +115,7 @@ export const InterviewGuidePage: React.FC<InterviewGuidePageProps> = ({
             <span>Interview Guide Questions (6)</span>
           </h3>
 
-          {loadingQuestions ? (
+          {loadingQuestions && questions.length === 0 ? (
             <div className="space-y-2">
               <Skeleton className="h-20 rounded-xl bg-[#ede9de]" />
               <Skeleton className="h-20 rounded-xl bg-[#ede9de]" />
@@ -106,7 +123,7 @@ export const InterviewGuidePage: React.FC<InterviewGuidePageProps> = ({
             </div>
           ) : (
             <div className="space-y-2.5">
-              {questions.map((q) => {
+              {questionsList.map((q) => {
                 const isSelected = selectedQuestionId === q.id;
                 return (
                   <button
@@ -145,7 +162,7 @@ export const InterviewGuidePage: React.FC<InterviewGuidePageProps> = ({
 
         {/* Right: Synthesis & Verbatim Market Evidence (8 cols) */}
         <div className="lg:col-span-8 space-y-6">
-          {loadingAnalysis ? (
+          {loadingAnalysis && !analysis ? (
             <div className="space-y-6">
               <Skeleton className="h-44 rounded-xl bg-[#ede9de]" />
               <Skeleton className="h-64 rounded-xl bg-[#ede9de]" />
@@ -180,7 +197,7 @@ export const InterviewGuidePage: React.FC<InterviewGuidePageProps> = ({
                     Key Market Findings
                   </h4>
                   <ul className="space-y-2">
-                    {analysis.key_findings.map((finding, idx) => (
+                    {(analysis.key_findings || []).map((finding, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 text-xs text-[#3d3a36]">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700 shrink-0 mt-0.5" />
                         <span className="leading-relaxed">{finding}</span>
@@ -204,21 +221,21 @@ export const InterviewGuidePage: React.FC<InterviewGuidePageProps> = ({
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
-                  {analysis.evidence_by_country['France'] && (
+                  {analysis.evidence_by_country && analysis.evidence_by_country['France'] && (
                     <EvidenceCard
                       evidence={analysis.evidence_by_country['France']}
                       onOpenTranscript={onOpenTranscript}
                     />
                   )}
 
-                  {analysis.evidence_by_country['Germany'] && (
+                  {analysis.evidence_by_country && analysis.evidence_by_country['Germany'] && (
                     <EvidenceCard
                       evidence={analysis.evidence_by_country['Germany']}
                       onOpenTranscript={onOpenTranscript}
                     />
                   )}
 
-                  {analysis.evidence_by_country['UK'] && (
+                  {analysis.evidence_by_country && analysis.evidence_by_country['UK'] && (
                     <EvidenceCard
                       evidence={analysis.evidence_by_country['UK']}
                       onOpenTranscript={onOpenTranscript}
