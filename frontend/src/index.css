@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #faf9f5;
+    color: #1f1e1d;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.011em;
+  }
+
+  h1, h2, h3, .font-serif-claude {
+    font-family: 'Source Serif 4', Georgia, Cambria, serif;
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, .font-mono-claude {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+}
+
+/* Custom warm scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d8d4ca;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b5b0a4;
+}
+
+.claude-card {
+  background-color: #ffffff;
+  border: 1px solid #e8e5dc;
+  box-shadow: 0 1px 3px rgba(31, 30, 29, 0.04), 0 1px 2px rgba(31, 30, 29, 0.02);
+}
+
+.claude-card-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.claude-card-hover:hover {
+  border-color: #cc785c;
+  box-shadow: 0 4px 12px rgba(204, 120, 92, 0.08), 0 1px 3px rgba(31, 30, 29, 0.04);
+}
+
+.claude-quote-box {
+  background-color: #f7f4ed;
+  border-left: 3px solid #cc785c;
+}
