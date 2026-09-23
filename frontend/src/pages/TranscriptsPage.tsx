@@ -6,12 +6,10 @@ import {
   Clock,
   User,
   Headphones,
-  Stethoscope,
-  Building2,
-  FileBadge2,
   Sparkles
 } from 'lucide-react';
 import { Skeleton } from '../components/common/Skeleton';
+import { getCountryFlag } from '../components/common/CountryFlag';
 import { api } from '../services/api';
 import type { Transcript, DialogueTurn } from '../types';
 
@@ -33,21 +31,25 @@ export const TranscriptsPage: React.FC<TranscriptsPageProps> = ({
   const turnRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
+    let isMounted = true;
     const fetchTranscripts = async () => {
       try {
         setLoading(true);
         const data = await api.getTranscripts();
-        setTranscripts(data);
-        if (initialTranscriptId) {
-          setSelectedId(initialTranscriptId);
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setTranscripts(data);
+          if (initialTranscriptId) {
+            setSelectedId(initialTranscriptId);
+          }
         }
       } catch (err) {
         console.error('Failed to load transcripts', err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchTranscripts();
+    return () => { isMounted = false; };
   }, [initialTranscriptId]);
 
   useEffect(() => {
@@ -87,15 +89,7 @@ export const TranscriptsPage: React.FC<TranscriptsPageProps> = ({
     );
   };
 
-  const getExpertIcon = (country: string) => {
-    switch (country?.toLowerCase()) {
-      case 'france': return Stethoscope;
-      case 'germany': return Building2;
-      default: return FileBadge2;
-    }
-  };
-
-  if (loading) {
+  if (loading && transcripts.length === 0) {
     return (
       <div className="p-8 max-w-5xl mx-auto space-y-6">
         <Skeleton className="h-14 rounded-xl bg-[#ede9de]" />
@@ -109,11 +103,11 @@ export const TranscriptsPage: React.FC<TranscriptsPageProps> = ({
       {/* Country Tab Switcher & Search Bar */}
       <div className="bg-white rounded-2xl border border-[#e8e5dc] p-4 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          {/* Tabs */}
+          {/* Tabs with Flags */}
           <div className="flex items-center gap-1.5 p-1 bg-[#f4efe6] rounded-xl border border-[#e8e5dc]">
-            {transcripts.map((t) => {
+            {(transcripts || []).map((t) => {
               const isSelected = selectedId.toLowerCase() === t.id.toLowerCase();
-              const ExpertIcon = getExpertIcon(t.country);
+              const flag = getCountryFlag(t.country);
               return (
                 <button
                   key={t.id}
@@ -121,13 +115,13 @@ export const TranscriptsPage: React.FC<TranscriptsPageProps> = ({
                     setSelectedId(t.id);
                     setSearchQuery('');
                   }}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
                     isSelected
                       ? 'bg-white text-[#c15f3e] shadow-xs border border-[#e8e5dc]'
                       : 'text-[#706c64] hover:text-[#1f1e1d] hover:bg-[#eae5da]'
                   }`}
                 >
-                  <ExpertIcon className="w-3.5 h-3.5" />
+                  <span className="text-sm select-none leading-none">{flag}</span>
                   <span>{t.country}</span>
                 </button>
               );
@@ -151,11 +145,12 @@ export const TranscriptsPage: React.FC<TranscriptsPageProps> = ({
         {currentTranscript && (
           <div className="flex items-center justify-between p-3.5 bg-[#fbf9f4] rounded-xl border border-[#e8e5dc] text-xs">
             <div className="flex items-center gap-2">
+              <span className="text-base select-none leading-none">{getCountryFlag(currentTranscript.country)}</span>
               <span className="font-serif font-bold text-[#1f1e1d] text-sm">{currentTranscript.expert_name}</span>
               <span className="text-[#8a857e] font-normal">• {currentTranscript.expert_role}</span>
             </div>
             <div className="text-[#8a857e] font-mono text-[11px] font-semibold">
-              {currentTranscript.dialogue_turns.length} Dialogue Turns Ingested
+              {(currentTranscript.dialogue_turns || []).length} Dialogue Turns Ingested
             </div>
           </div>
         )}
@@ -164,7 +159,7 @@ export const TranscriptsPage: React.FC<TranscriptsPageProps> = ({
       {/* Transcript Dialogue Feed */}
       {currentTranscript && (
         <div className="space-y-3">
-          {currentTranscript.dialogue_turns.map((turn) => {
+          {(currentTranscript.dialogue_turns || []).map((turn) => {
             const isTarget = targetTimestamp === turn.timestamp;
             const isMatch = searchQuery.trim() && turn.text.toLowerCase().includes(searchQuery.toLowerCase());
 

@@ -14,21 +14,25 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onOpenTranscript }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchThemes = async () => {
       try {
         setLoading(true);
         const data = await api.getThemes();
-        setThemes(data);
+        if (isMounted && Array.isArray(data)) {
+          setThemes(data);
+        }
       } catch (err) {
         console.error('Failed to load themes', err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchThemes();
+    return () => { isMounted = false; };
   }, []);
 
-  if (loading) {
+  if (loading && themes.length === 0) {
     return (
       <div className="p-8 max-w-7xl mx-auto space-y-6">
         <Skeleton className="h-40 rounded-xl bg-[#ede9de]" />
@@ -50,7 +54,7 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onOpenTranscript }) => {
             Common Themes Across Expert Calls
           </h2>
           <p className="text-xs text-[#706c64] mt-1">
-            Major recurring themes and cross-market agreements identified across France, Germany, and the United Kingdom
+            Major recurring themes and cross-market agreements identified across France 🇫🇷, Germany 🇩🇪, and the United Kingdom 🇬🇧
           </p>
         </div>
       </div>
@@ -69,9 +73,9 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onOpenTranscript }) => {
             <thead>
               <tr className="border-b border-[#e8e5dc] bg-[#fbf9f4] text-[#706c64] font-bold uppercase tracking-wider text-[11px]">
                 <th className="py-3.5 px-6">Identified Theme</th>
-                <th className="py-3.5 px-5 text-center w-32">France</th>
-                <th className="py-3.5 px-5 text-center w-32">Germany</th>
-                <th className="py-3.5 px-5 text-center w-32">UK</th>
+                <th className="py-3.5 px-5 text-center w-36">🇫🇷 France</th>
+                <th className="py-3.5 px-5 text-center w-36">🇩🇪 Germany</th>
+                <th className="py-3.5 px-5 text-center w-36">🇬🇧 UK</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#f0ebd8]">
@@ -141,9 +145,9 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onOpenTranscript }) => {
                     {theme.title}
                   </h4>
                   <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold">
-                    <span className="px-2 py-0.5 rounded bg-[#eff6ff] text-[#1d4ed8] border border-[#bfdbfe]">FR</span>
-                    <span className="px-2 py-0.5 rounded bg-[#fffbeb] text-[#b45309] border border-[#fde68a]">DE</span>
-                    <span className="px-2 py-0.5 rounded bg-[#ecfdf5] text-[#047857] border border-[#a7f3d0]">UK</span>
+                    <span className="px-2 py-0.5 rounded bg-[#eff6ff] text-[#1d4ed8] border border-[#bfdbfe]">🇫🇷 FR</span>
+                    <span className="px-2 py-0.5 rounded bg-[#fffbeb] text-[#b45309] border border-[#fde68a]">🇩🇪 DE</span>
+                    <span className="px-2 py-0.5 rounded bg-[#ecfdf5] text-[#047857] border border-[#a7f3d0]">🇬🇧 UK</span>
                   </div>
                 </div>
                 <p className="text-xs text-[#5c5850] leading-relaxed font-normal">
@@ -157,7 +161,7 @@ export const ThemesPage: React.FC<ThemesPageProps> = ({ onOpenTranscript }) => {
                   Grounded Verbatim Quotes Across Markets
                 </h5>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {theme.evidence.map((ev) => (
+                  {(theme.evidence || []).map((ev) => (
                     <EvidenceCard
                       key={ev.id}
                       evidence={ev}

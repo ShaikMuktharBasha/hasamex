@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ExternalLink, Copy, Check, Quote, Clock, User, Stethoscope, Building2, FileBadge2, ArrowUpRight } from 'lucide-react';
+import { getCountryFlag } from '../common/CountryFlag';
 import type { EvidenceItem } from '../../types';
 
 interface EvidenceCardProps {
@@ -27,44 +28,40 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
       case 'france':
         return {
           badge: 'bg-[#eff6ff] text-[#1d4ed8] border-[#bfdbfe]',
-          icon: Stethoscope,
           borderAccent: 'border-l-[#3b82f6]',
         };
       case 'germany':
         return {
           badge: 'bg-[#fffbeb] text-[#b45309] border-[#fde68a]',
-          icon: Building2,
           borderAccent: 'border-l-[#d97706]',
         };
       case 'united kingdom':
       case 'uk':
         return {
           badge: 'bg-[#ecfdf5] text-[#047857] border-[#a7f3d0]',
-          icon: FileBadge2,
           borderAccent: 'border-l-[#059669]',
         };
       default:
         return {
           badge: 'bg-[#f4efe6] text-[#5c5850] border-[#e2ded4]',
-          icon: User,
           borderAccent: 'border-l-[#cc785c]',
         };
     }
   };
 
   const styles = getCountryStyles(evidence.country);
-  const ExpertIcon = styles.icon;
+  const flag = getCountryFlag(evidence.country);
 
   return (
     <div className={`bg-white rounded-xl border border-[#e8e5dc] ${styles.borderAccent} border-l-4 p-5 shadow-xs hover:border-[#cc785c] hover:shadow-md transition-all duration-200 flex flex-col justify-between`}>
       <div>
-        {/* Header with Country Badge & Timestamp */}
+        {/* Header with Country Flag Badge & Timestamp */}
         <div className="flex items-center justify-between gap-2 mb-3">
           {showCountryHeader && (
             <div className="flex items-center gap-2">
               <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider border ${styles.badge}`}>
-                <ExpertIcon className="w-3.5 h-3.5" />
-                {evidence.country}
+                <span className="text-sm select-none leading-none">{flag}</span>
+                <span>{evidence.country}</span>
               </span>
               <span className="text-[11px] text-[#8a857e] font-medium">Expert Interview</span>
             </div>

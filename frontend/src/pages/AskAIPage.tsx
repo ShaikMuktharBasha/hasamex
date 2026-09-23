@@ -102,10 +102,10 @@ export const AskAIPage: React.FC<AskAIPageProps> = ({ onOpenTranscript }) => {
             onChange={(e) => setCountryFilter(e.target.value)}
             className="px-3 py-3 rounded-xl border border-[#e8e5dc] text-xs font-semibold text-[#5c5850] bg-[#faf9f5] focus:outline-none focus:border-[#cc785c]"
           >
-            <option value="">All Markets</option>
-            <option value="France">France</option>
-            <option value="Germany">Germany</option>
-            <option value="United Kingdom">United Kingdom</option>
+            <option value="">🌐 All Markets</option>
+            <option value="France">🇫🇷 France</option>
+            <option value="Germany">🇩🇪 Germany</option>
+            <option value="United Kingdom">🇬🇧 United Kingdom</option>
           </select>
 
           <button

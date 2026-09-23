@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Scale, HelpCircle, CheckCircle2, Info, ArrowRight, Feather, Stethoscope, Building2, FileBadge2 } from 'lucide-react';
+import { Scale, HelpCircle, CheckCircle2, Info, ArrowRight, Feather } from 'lucide-react';
 import { EvidenceCard } from '../components/evidence/EvidenceCard';
 import { Skeleton } from '../components/common/Skeleton';
 import { api } from '../services/api';
@@ -14,21 +14,25 @@ export const DisagreementsPage: React.FC<DisagreementsPageProps> = ({ onOpenTran
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchDisagreements = async () => {
       try {
         setLoading(true);
         const data = await api.getDisagreements();
-        setDisagreements(data);
+        if (isMounted && Array.isArray(data)) {
+          setDisagreements(data);
+        }
       } catch (err) {
         console.error('Failed to load disagreements', err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchDisagreements();
+    return () => { isMounted = false; };
   }, []);
 
-  if (loading) {
+  if (loading && disagreements.length === 0) {
     return (
       <div className="p-8 max-w-7xl mx-auto space-y-6">
         <Skeleton className="h-48 rounded-xl bg-[#ede9de]" />
@@ -50,7 +54,7 @@ export const DisagreementsPage: React.FC<DisagreementsPageProps> = ({ onOpenTran
             Expert Disagreements & Market Divergences
           </h2>
           <p className="text-xs text-[#706c64] mt-1">
-            Objective, neutral comparative synthesis where expert priorities, clinical philosophies, and procurement gates diverge
+            Objective, neutral comparative synthesis where expert priorities, clinical philosophies, and procurement gates diverge across 🇫🇷 France, 🇩🇪 Germany, and 🇬🇧 the UK
           </p>
         </div>
       </div>
@@ -86,11 +90,11 @@ export const DisagreementsPage: React.FC<DisagreementsPageProps> = ({ onOpenTran
               </p>
             </div>
 
-            {/* Side by Side Position Summaries */}
+            {/* Side by Side Position Summaries with Flags */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-[#faf9f5] p-5 rounded-xl border border-[#e8e5dc] text-xs">
-              <div className="space-y-1.5 p-3 rounded-lg bg-white border border-[#e8e5dc] border-l-3 border-l-[#3b82f6]">
+              <div className="space-y-1.5 p-3.5 rounded-lg bg-white border border-[#e8e5dc] border-l-3 border-l-[#3b82f6]">
                 <div className="font-bold text-[#1d4ed8] uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <Stethoscope className="w-3.5 h-3.5" />
+                  <span className="text-sm select-none">🇫🇷</span>
                   <span>France Perspective</span>
                 </div>
                 <p className="text-[#3d3a36] leading-relaxed font-medium">
@@ -98,9 +102,9 @@ export const DisagreementsPage: React.FC<DisagreementsPageProps> = ({ onOpenTran
                 </p>
               </div>
 
-              <div className="space-y-1.5 p-3 rounded-lg bg-white border border-[#e8e5dc] border-l-3 border-l-[#d97706]">
+              <div className="space-y-1.5 p-3.5 rounded-lg bg-white border border-[#e8e5dc] border-l-3 border-l-[#d97706]">
                 <div className="font-bold text-[#b45309] uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5" />
+                  <span className="text-sm select-none">🇩🇪</span>
                   <span>Germany Perspective</span>
                 </div>
                 <p className="text-[#3d3a36] leading-relaxed font-medium">
@@ -108,9 +112,9 @@ export const DisagreementsPage: React.FC<DisagreementsPageProps> = ({ onOpenTran
                 </p>
               </div>
 
-              <div className="space-y-1.5 p-3 rounded-lg bg-white border border-[#e8e5dc] border-l-3 border-l-[#059669]">
+              <div className="space-y-1.5 p-3.5 rounded-lg bg-white border border-[#e8e5dc] border-l-3 border-l-[#059669]">
                 <div className="font-bold text-[#047857] uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <FileBadge2 className="w-3.5 h-3.5" />
+                  <span className="text-sm select-none">🇬🇧</span>
                   <span>UK Perspective</span>
                 </div>
                 <p className="text-[#3d3a36] leading-relaxed font-medium">
@@ -125,19 +129,19 @@ export const DisagreementsPage: React.FC<DisagreementsPageProps> = ({ onOpenTran
                 Direct Supporting Quotations
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {item.evidence['France'] && (
+                {item.evidence && item.evidence['France'] && (
                   <EvidenceCard
                     evidence={item.evidence['France']}
                     onOpenTranscript={onOpenTranscript}
                   />
                 )}
-                {item.evidence['Germany'] && (
+                {item.evidence && item.evidence['Germany'] && (
                   <EvidenceCard
                     evidence={item.evidence['Germany']}
                     onOpenTranscript={onOpenTranscript}
                   />
                 )}
-                {item.evidence['UK'] && (
+                {item.evidence && item.evidence['UK'] && (
                   <EvidenceCard
                     evidence={item.evidence['UK']}
                     onOpenTranscript={onOpenTranscript}

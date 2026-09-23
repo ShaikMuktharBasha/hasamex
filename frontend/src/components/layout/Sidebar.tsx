@@ -15,6 +15,7 @@ import {
   Globe2,
   Feather
 } from 'lucide-react';
+import { getCountryFlag } from '../common/CountryFlag';
 import type { NavigationTab } from '../../types';
 
 interface SidebarProps {
@@ -45,6 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       name: 'Dr. Jean Martin',
       role: 'Head of Urology',
       country: 'France',
+      flag: '🇫🇷',
       icon: Stethoscope,
       accent: 'border-l-[#3b82f6]'
     },
@@ -53,6 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       name: 'Anna Keller',
       role: 'Procurement Director',
       country: 'Germany',
+      flag: '🇩🇪',
       icon: Building2,
       accent: 'border-l-[#d97706]'
     },
@@ -61,6 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       name: 'Dr. Emily Carter',
       role: 'Consultant Urologist',
       country: 'UK',
+      flag: '🇬🇧',
       icon: FileBadge2,
       accent: 'border-l-[#059669]'
     },
@@ -143,8 +147,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`w-full text-left px-3 py-2.5 rounded-xl bg-[#282725] hover:bg-[#32302d] border border-[#343331] ${expert.accent} border-l-4 transition-all group flex items-start justify-between`}
               >
                 <div className="flex items-start gap-2.5">
-                  <div className="w-6 h-6 rounded-lg bg-[#343331] flex items-center justify-center text-[#d6d3cd] mt-0.5 shrink-0 group-hover:text-white">
-                    <ExpertIcon className="w-3.5 h-3.5" />
+                  <div className="w-7 h-7 rounded-lg bg-[#343331] flex items-center justify-center text-sm shrink-0 group-hover:bg-[#3e3b38] transition-colors">
+                    <span>{expert.flag}</span>
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">

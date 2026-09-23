@@ -86,10 +86,10 @@ export const EvidenceExplorerPage: React.FC<EvidenceExplorerPageProps> = ({ onOp
               onChange={(e) => setCountry(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-[#e8e5dc] text-xs font-medium text-[#5c5850] bg-[#faf9f5] focus:outline-none focus:border-[#cc785c]"
             >
-              <option value="">All Countries</option>
-              <option value="France">France</option>
-              <option value="Germany">Germany</option>
-              <option value="United Kingdom">United Kingdom</option>
+              <option value="">🌐 All Countries</option>
+              <option value="France">🇫🇷 France</option>
+              <option value="Germany">🇩🇪 Germany</option>
+              <option value="United Kingdom">🇬🇧 United Kingdom</option>
             </select>
           </div>
 
@@ -100,10 +100,10 @@ export const EvidenceExplorerPage: React.FC<EvidenceExplorerPageProps> = ({ onOp
               onChange={(e) => setSpeaker(e.target.value)}
               className="w-full px-3 py-2 rounded-xl border border-[#e8e5dc] text-xs font-medium text-[#5c5850] bg-[#faf9f5] focus:outline-none focus:border-[#cc785c]"
             >
-              <option value="">All Experts</option>
-              <option value="Martin">Dr. Jean Martin (France)</option>
-              <option value="Keller">Anna Keller (Germany)</option>
-              <option value="Carter">Dr. Emily Carter (UK)</option>
+              <option value="">👥 All Experts</option>
+              <option value="Martin">🇫🇷 Dr. Jean Martin (France)</option>
+              <option value="Keller">🇩🇪 Anna Keller (Germany)</option>
+              <option value="Carter">🇬🇧 Dr. Emily Carter (UK)</option>
             </select>
           </div>
         </form>

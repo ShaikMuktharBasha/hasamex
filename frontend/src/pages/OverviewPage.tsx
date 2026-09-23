@@ -10,9 +10,6 @@ import {
   ShieldCheck,
   Layers,
   ChevronRight,
-  Stethoscope,
-  Building2,
-  FileBadge2,
   BookOpen,
   ArrowUpRight,
   Quote,
@@ -21,6 +18,7 @@ import {
 import { MetricCard } from '../components/common/MetricCard';
 import { EvidenceCard } from '../components/evidence/EvidenceCard';
 import { Skeleton } from '../components/common/Skeleton';
+import { getCountryFlag } from '../components/common/CountryFlag';
 import { api } from '../services/api';
 import type { OverviewMetrics, ThemeItem, EvidenceItem, NavigationTab } from '../types';
 
@@ -79,14 +77,6 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
     );
   }
 
-  const getExpertIcon = (country?: string) => {
-    switch (country?.toLowerCase()) {
-      case 'france': return Stethoscope;
-      case 'germany': return Building2;
-      default: return FileBadge2;
-    }
-  };
-
   const expertsList = metrics?.experts || [
     { id: 'france', name: 'Dr. Jean Martin', role: 'Head of Urology', country: 'France', turns_count: 14 },
     { id: 'germany', name: 'Anna Keller', role: 'Former Hospital Procurement Director', country: 'Germany', turns_count: 14 },
@@ -115,7 +105,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
             Evidence-Grounded Expert Call Intelligence
           </h2>
           <p className="text-sm text-[#b8b3a9] leading-relaxed font-normal">
-            Synthesizing 3 expert clinical and procurement interviews from France, Germany, and the United Kingdom. Every analytical insight is strictly anchored to original transcripts with verbatim quotations and temporal audio timestamps.
+            Synthesizing 3 expert clinical and procurement interviews from France 🇫🇷, Germany 🇩🇪, and the United Kingdom 🇬🇧. Every analytical insight is strictly anchored to original transcripts with verbatim quotations and temporal audio timestamps.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <button
@@ -142,7 +132,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         <MetricCard
           title="Expert Calls Ingested"
           value={metrics?.expert_calls_count || 3}
-          subtitle="France, Germany, UK"
+          subtitle="🇫🇷 France · 🇩🇪 Germany · 🇬🇧 UK"
           icon={Users}
           colorScheme="terracotta"
         />
@@ -191,7 +181,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {expertsList.map((expert) => {
-            const ExpertIcon = getExpertIcon(expert.country);
+            const flag = getCountryFlag(expert.country);
             return (
               <div
                 key={expert.id}
@@ -200,8 +190,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-[#b45309] bg-[#fffbeb] px-2.5 py-1 rounded-md border border-[#fde68a] inline-flex items-center gap-1.5">
-                      <ExpertIcon className="w-3 h-3" />
-                      {expert.country}
+                      <span className="text-sm select-none">{flag}</span>
+                      <span>{expert.country}</span>
                     </span>
                     <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-bold bg-[#ecfdf5] px-2 py-0.5 rounded-full border border-[#a7f3d0]">
                       <CheckCircle2 className="w-3 h-3" />
@@ -281,7 +271,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                   <div className="flex items-center gap-2 shrink-0">
                     <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#065f46] bg-[#ecfdf5] border border-[#a7f3d0] px-2 py-0.5 rounded">
                       <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                      3 Markets
+                      <span>🇫🇷 🇩🇪 🇬🇧</span>
                     </span>
                     <ChevronRight className="w-4 h-4 text-[#b8b3a9] group-hover:text-[#c15f3e] transition-colors" />
                   </div>
@@ -323,9 +313,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                       {theme.title}
                     </h4>
                     <div className="flex items-center gap-1 font-mono text-[10px] font-bold">
-                      <span className="px-2 py-0.5 rounded bg-[#eff6ff] text-[#1d4ed8] border border-[#bfdbfe]">FR</span>
-                      <span className="px-2 py-0.5 rounded bg-[#fffbeb] text-[#b45309] border border-[#fde68a]">DE</span>
-                      <span className="px-2 py-0.5 rounded bg-[#ecfdf5] text-[#047857] border border-[#a7f3d0]">UK</span>
+                      <span className="px-2 py-0.5 rounded bg-[#eff6ff] text-[#1d4ed8] border border-[#bfdbfe]">🇫🇷 FR</span>
+                      <span className="px-2 py-0.5 rounded bg-[#fffbeb] text-[#b45309] border border-[#fde68a]">🇩🇪 DE</span>
+                      <span className="px-2 py-0.5 rounded bg-[#ecfdf5] text-[#047857] border border-[#a7f3d0]">🇬🇧 UK</span>
                     </div>
                   </div>
                   <p className="text-xs text-[#5c5850] line-clamp-2 leading-relaxed">
