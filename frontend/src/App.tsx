@@ -9,6 +9,7 @@ import { DisagreementsPage } from './pages/DisagreementsPage';
 import { TranscriptsPage } from './pages/TranscriptsPage';
 import { EvidenceExplorerPage } from './pages/EvidenceExplorerPage';
 import { EvaluationPage } from './pages/EvaluationPage';
+import { HowItWorksWidget } from './components/common/HowItWorksWidget';
 import { api } from './services/api';
 import { NavigationTab } from './types';
 
@@ -44,7 +45,7 @@ export function App() {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-100 font-sans text-slate-900">
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-100 font-sans text-slate-900 relative">
       {/* Fixed Left Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -99,6 +100,13 @@ export function App() {
           {activeTab === 'evaluation' && <EvaluationPage />}
         </main>
       </div>
+
+      {/* Floating "How It Works" Guide Widget */}
+      <HowItWorksWidget
+        onNavigate={setActiveTab}
+        onOpenTranscript={handleOpenTranscript}
+        onSelectQuestion={setSelectedQuestionId}
+      />
     </div>
   );
 }
