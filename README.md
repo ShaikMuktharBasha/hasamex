@@ -160,6 +160,8 @@ hasamex-expert-intelligence/
 
 ## 6. Quickstart / Setup Instructions
 
+> 📖 **Detailed Step-by-Step Guide**: See **[RUN_LOCALLY.md](RUN_LOCALLY.md)** for detailed operating-system-specific setup, troubleshooting, and Docker instructions.
+
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+ and npm
